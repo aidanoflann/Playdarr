@@ -9,6 +9,7 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.DataAugmentation.DailySeries;
 using NzbDrone.Core.Exceptions;
+using NzbDrone.Core.Games;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MetadataSource.SkyHook.Resource;
@@ -32,11 +33,11 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
                             Logger logger)
         {
             _httpClient = httpClient;
-            _requestBuilder = requestBuilder.SkyHookTvdb;
+            _requestBuilder = requestBuilder.GiantBombdb;
             _logger = logger;
             _seriesService = seriesService;
             _dailySeriesService = dailySeriesService;
-            _requestBuilder = requestBuilder.SkyHookTvdb;
+            _requestBuilder = requestBuilder.GiantBombdb;
         }
 
         public Tuple<Series, List<Episode>> GetSeriesInfo(int tvdbSeriesId)
@@ -161,6 +162,62 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
             }
         }
 
+        public List<Game> SearchForNewGame(string title)
+        {
+            try
+            {
+                var lowerTitle = title.ToLowerInvariant();
+
+                if (lowerTitle.StartsWith("tvdb:") || lowerTitle.StartsWith("tvdbid:"))
+                {
+                    var slug = lowerTitle.Split(':')[1].Trim();
+
+                    if (slug.IsNullOrWhiteSpace() || slug.Any(char.IsWhiteSpace) || !int.TryParse(slug, out var tvdbId) || tvdbId <= 0)
+                    {
+                        return new List<Game>();
+                    }
+
+                    // try
+                    // {
+                    //     var existingSeries = _seriesService.FindByTvdbId(tvdbId);
+                    //     if (existingSeries != null)
+                    //     {
+                    //         return new List<Game> { existingSeries };
+                    //     }
+
+                    // return new List<Game> { GetSeriesInfo(tvdbId).Item1 };
+                    // }
+                    // catch (SeriesNotFoundException)
+                    // {
+                    //     return new List<Series>();
+                    // }
+                }
+
+                var httpRequest = _requestBuilder.Create()
+                                                .SetSegment("route", "games")
+                                                .AddQueryParam("filter", $"name:{title.ToLower().Trim()}")
+                                                .Build();
+                var httpResponse = _httpClient.Get<GamesResource>(httpRequest);
+
+                return httpResponse.Resource.Results.SelectList(MapGame);
+            }
+            catch (HttpException ex)
+            {
+                _logger.Warn(ex);
+                throw new SkyHookException("Search for '{0}' failed. Unable to communicate with SkyHook. {1}", ex, title, ex.Message);
+            }
+            catch (WebException ex)
+            {
+                _logger.Warn(ex);
+                throw new SkyHookException("Search for '{0}' failed. Unable to communicate with SkyHook. {1}", ex, title, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.Warn(ex);
+                throw new SkyHookException("Search for '{0}' failed. Invalid response received from SkyHook. {1}", ex, title, ex.Message);
+            }
+        }
+
         private Series MapSearchResult(ShowResource show)
         {
             var series = _seriesService.FindByTvdbId(show.TvdbId);
@@ -252,6 +309,101 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
             return series;
         }
 
+        private Game MapGame(GameResource gameResource)
+        {
+            var game = new Game();
+
+            // game.TvdbId = showResource.TvdbId;
+
+            // if (showResource.TvRageId.HasValue)
+            // {
+            //     game.TvRageId = showResource.TvRageId.Value;
+            // }
+
+            // if (showResource.TvMazeId.HasValue)
+            // {
+            //     game.TvMazeId = showResource.TvMazeId.Value;
+            // }
+
+            // if (showResource.TmdbId.HasValue)
+            // {
+            //     game.TmdbId = showResource.TmdbId.Value;
+            // }
+
+            // game.ImdbId = showResource.ImdbId;
+            // game.MalIds = showResource.MalIds;
+            // game.AniListIds = showResource.AniListIds;
+            game.Name = gameResource.Name;
+            game.SiteDetailURL = gameResource.Site_Detail_url;
+            game.Platforms = gameResource.Platforms.Select(MapPlatforms).ToList();
+            game.Deck = gameResource.Deck;
+            game.Description = gameResource.Description;
+
+            // game.CleanTitle = Parser.Parser.CleanSeriesTitle(showResource.Title);
+            // game.SortTitle = SeriesTitleNormalizer.Normalize(showResource.Title, showResource.TvdbId);
+
+            // game.OriginalLanguage = showResource.OriginalLanguage.IsNotNullOrWhiteSpace() ?
+            //     IsoLanguages.Find(showResource.OriginalLanguage.ToLower())?.Language ?? Language.English :
+            //     Language.English;
+
+            if (gameResource.Original_Release_Date != null)
+            {
+                game.OriginalReleaseDate = DateTime.ParseExact(gameResource.Original_Release_Date, "yyyy-mm-dd", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
+                game.Year = game.OriginalReleaseDate.Value.Year;
+            }
+            else if (gameResource.Expected_Release_Year.HasValue)
+            {
+                game.Year = gameResource.Expected_Release_Year.Value;
+            }
+            else
+            {
+                game.Year = 9999;
+            }
+
+            // if (showResource.LastAired != null)
+            // {
+            //     game.LastAired = DateTime.ParseExact(showResource.LastAired, "yyyy-MM-dd", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
+            // }
+
+            // game.Overview = showResource.Overview;
+
+            // if (showResource.Runtime != null)
+            // {
+            //     game.Runtime = showResource.Runtime.Value;
+            // }
+
+            // game.Network = showResource.Network;
+
+            // if (showResource.TimeOfDay != null)
+            // {
+            //     game.AirTime = string.Format("{0:00}:{1:00}", showResource.TimeOfDay.Hours, showResource.TimeOfDay.Minutes);
+            // }
+
+            // game.TitleSlug = showResource.Slug;
+            // game.Status = MapSeriesStatus(showResource.Status);
+            // game.Ratings = MapRatings(showResource.Rating);
+            // game.Genres = showResource.Genres;
+
+            // if (showResource.ContentRating.IsNotNullOrWhiteSpace())
+            // {
+            //     game.Certification = showResource.ContentRating.ToUpper();
+            // }
+
+            // if (_dailySeriesService.IsDailySeries(game.TvdbId))
+            // {
+            //     game.SeriesType = SeriesTypes.Daily;
+            // }
+
+            // game.Images = showResource.Images.Select(MapImage).ToList();
+            // game.Monitored = true;
+
+            // game.Actors = showResource.Actors.Select(MapActors).ToList();
+            // game.Seasons = showResource.Seasons.Select(MapSeason).ToList();
+            game.Images = MapGameImages(gameResource.Image);
+
+            return game;
+        }
+
         private static Actor MapActors(ActorResource arg)
         {
             var newActor = new Actor
@@ -325,6 +477,23 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
             return SeriesStatusType.Continuing;
         }
 
+        private static Platform MapPlatforms(PlatformResource platformResource)
+        {
+            if (platformResource == null)
+            {
+                return new Platform();
+            }
+
+            return new Platform
+            {
+                APIDetailURL = platformResource.API_Detail_url,
+                Identifier = platformResource.ID,
+                Name = platformResource.Name,
+                SiteDetailURL = platformResource.Site_Detail_url,
+                Abbreviation = platformResource.Abbreviation
+            };
+        }
+
         private static Ratings MapRatings(RatingResource rating)
         {
             if (rating == null)
@@ -337,6 +506,14 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
                 Votes = rating.Count,
                 Value = rating.Value
             };
+        }
+
+        private static List<MediaCover.MediaCover> MapGameImages(GameImageResource gameImageResource)
+        {
+            return
+            [
+                new MediaCover.MediaCover(MediaCoverTypes.Poster, gameImageResource.small_url)
+            ];
         }
 
         private static MediaCover.MediaCover MapImage(ImageResource arg)

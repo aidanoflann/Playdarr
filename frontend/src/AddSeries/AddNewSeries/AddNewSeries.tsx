@@ -103,6 +103,7 @@ function AddNewSeries() {
         {!isFetching && !error && !!data.length ? (
           <div className={styles.searchResults}>
             {data.map((item) => {
+              // item here is GameResource
               return <AddNewSeriesSearchResult key={item.tvdbId} {...item} />;
             })}
           </div>

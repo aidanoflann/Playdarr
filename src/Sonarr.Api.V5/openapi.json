@@ -171,7 +171,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/SeriesResource"
+                    "$ref": "#/components/schemas/GameResource"
                   }
                 }
               },
@@ -179,7 +179,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/SeriesResource"
+                    "$ref": "#/components/schemas/GameResource"
                   }
                 }
               },
@@ -187,7 +187,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/SeriesResource"
+                    "$ref": "#/components/schemas/GameResource"
                   }
                 }
               }
@@ -287,6 +287,31 @@
           }
         },
         "additionalProperties": false
+      },
+      "PlatformResource": {
+        "type": "object",
+        "properties": {
+          "apiDetailURL": {
+            "type": "string",
+            "nullable": true
+          },
+          "identifier": {
+            "type": "number",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "siteDetailURL": {
+            "type": "string",
+            "nullable": true
+          },
+          "abbreviation": {
+            "type": "string",
+            "nullable": true
+          }
+        }
       },
       "AlternateTitleResource": {
         "type": "object",
@@ -476,7 +501,7 @@
         },
         "additionalProperties": false
       },
-      "SeriesResource": {
+      "GameResource": {
         "type": "object",
         "properties": {
           "id": {
@@ -491,6 +516,13 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/AlternateTitleResource"
+            },
+            "nullable": true
+          },
+          "platforms": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PlatformResource"
             },
             "nullable": true
           },

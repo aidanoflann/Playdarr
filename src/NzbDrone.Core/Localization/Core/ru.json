@@ -1570,7 +1570,7 @@
     "SelectFolder": "Выбрать папку",
     "SeriesDetailsNoEpisodeFiles": "Нет файлов эпизода",
     "SeriesDetailsGoTo": "Перейти к {title}",
-    "SeriesAndEpisodeInformationIsProvidedByTheTVDB": "Информация о сериалах и эпизодах предоставлена TheTVDB.com. [Пожалуйста, рассмотрите возможность их поддержки]({url}) .",
+    "SeriesAndEpisodeInformationIsProvidedByProvider": "Информация о сериалах и эпизодах предоставлена GiantBomb. [Пожалуйста, рассмотрите возможность их поддержки]({url}) .",
     "SeriesFolderImportedTooltip": "Эпизод импортирован из папки сериала",
     "SeriesFolderFormat": "Формат папки сериала",
     "SeriesDetailsOneEpisodeFile": "1 файл эпизода",

@@ -597,7 +597,7 @@
     "SeriesTitle": "Titolo Serie",
     "ShowPath": "Mostra Percorso",
     "Table": "Tabella",
-    "TheTvdb": "TheTVDB",
+    "MetaDataProviderNameExplicit":"GiantBomb"
     "Total": "Totale",
     "TotalFileSize": "Totale Dimensione File",
     "DownloadClientQbittorrentTorrentStateMetadata": "qBittorrent sta scaricando i metadati",

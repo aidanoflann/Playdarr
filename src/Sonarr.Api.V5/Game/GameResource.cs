@@ -1,0 +1,111 @@
+using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Languages;
+using NzbDrone.Core.MediaCover;
+using NzbDrone.Core.Tv;
+using Sonarr.Api.V5.Series;
+using Sonarr.Http.REST;
+
+namespace Sonarr.Api.V5.Game;
+
+public class GameResource : RestResource
+{
+    public string? Name { get; set; }
+    public List<AlternateTitleResource>? AlternateTitles { get; set; }
+    public string? SortTitle { get; set; }
+    public SeriesStatusType Status { get; set; }
+    public bool Ended => true;
+    public string? ProfileName { get; set; }
+    public string? Overview { get; set; }
+    public DateTime? NextAiring { get; set; }
+    public DateTime? PreviousAiring { get; set; }
+    public string? Network { get; set; }
+    public string? AirTime { get; set; }
+    public List<MediaCover>? Images { get; set; }
+    public Language? OriginalLanguage { get; set; }
+    public string? RemotePoster { get; set; }
+    public List<SeasonResource>? Seasons { get; set; }
+    public int Year { get; set; }
+    public string? Path { get; set; }
+    public int QualityProfileId { get; set; }
+    public bool SeasonFolder { get; set; }
+    public bool Monitored { get; set; }
+    public NewItemMonitorTypes MonitorNewItems { get; set; }
+    public bool UseSceneNumbering { get; set; }
+    public int Runtime { get; set; }
+    public int TvdbId { get; set; }
+    public int TvRageId { get; set; }
+    public int TvMazeId { get; set; }
+    public int TmdbId { get; set; }
+    public DateTime? OriginalReleaseDate { get; set; }
+    public DateTime? LastAired { get; set; }
+    public SeriesTypes SeriesType { get; set; }
+    public string? CleanTitle { get; set; }
+    public string? ImdbId { get; set; }
+    public string? TitleSlug { get; set; }
+    public string? RootFolderPath { get; set; }
+    public string? Folder { get; set; }
+    public string? Certification { get; set; }
+    public List<string>? Genres { get; set; }
+    public HashSet<int>? Tags { get; set; }
+    public DateTime Added { get; set; }
+    public AddSeriesOptions? AddOptions { get; set; }
+    public Ratings? Ratings { get; set; }
+    public SeriesStatisticsResource? Statistics { get; set; }
+    public bool? EpisodesChanged { get; set; }
+    public string? SiteDetailURL { get; set; }
+    public List<PlatformResource>? Platforms { get; set; }
+    public string? Deck { get; set; }
+    public string? Description { get; set; }
+}
+
+public class AlternateTitleResource
+{
+}
+
+public static class GameResourceMapper
+{
+    public static GameResource ToResource(this NzbDrone.Core.Games.Game model, bool includeSeasonImages = false)
+    {
+        return new GameResource
+        {
+            Id = model.Id,
+            Name = model.Name,
+            SortTitle = model.SortTitle,
+            Status = model.Status,
+            Overview = model.Overview,
+            Network = model.Network,
+            AirTime = model.AirTime,
+            Images = model.Images.JsonClone(),
+            Seasons = new List<SeasonResource>(),
+            Year = model.Year,
+            OriginalLanguage = model.OriginalLanguage,
+            Path = model.Path,
+            QualityProfileId = model.QualityProfileId,
+            SeasonFolder = model.SeasonFolder,
+            Monitored = model.Monitored,
+            MonitorNewItems = model.MonitorNewItems,
+            UseSceneNumbering = model.UseSceneNumbering,
+            Runtime = model.Runtime,
+            TvdbId = model.TvdbId,
+            TvRageId = model.TvRageId,
+            TvMazeId = model.TvMazeId,
+            TmdbId = model.TmdbId,
+            OriginalReleaseDate = model.OriginalReleaseDate,
+            LastAired = model.LastAired,
+            SeriesType = model.SeriesType,
+            CleanTitle = model.CleanTitle,
+            ImdbId = model.ImdbId,
+            TitleSlug = model.TitleSlug,
+            Certification = model.Certification,
+            Genres = model.Genres,
+            Tags = model.Tags,
+            Added = model.Added,
+            AddOptions = model.AddOptions,
+            Ratings = model.Ratings,
+            SiteDetailURL = model.SiteDetailURL,
+            Platforms = new List<PlatformResource>(), // TODO: use JsonClone here? rather than the current post-op
+            Deck = model.Deck,
+            Description = model.Description,
+        };
+    }
+}

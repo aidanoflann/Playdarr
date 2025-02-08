@@ -46,6 +46,14 @@ export interface Season {
   isSaving?: boolean;
 }
 
+export interface Platform {
+  apiDetailURL : string;
+  id : number;
+  name : string;
+  siteDetailURL : string;
+  abbreviation : string;
+}
+
 export interface Ratings {
   votes: number;
   value: number;
@@ -71,7 +79,7 @@ interface Series extends ModelBase {
   certification: string;
   cleanTitle: string;
   ended: boolean;
-  firstAired: string;
+  originalReleaseDate: string;
   genres: string[];
   images: Image[];
   imdbId?: string;
@@ -94,7 +102,7 @@ interface Series extends ModelBase {
   statistics?: Statistics;
   status: SeriesStatus;
   tags: number[];
-  title: string;
+  name: string;
   titleSlug: string;
   tvdbId: number;
   tvMazeId: number;
@@ -104,6 +112,10 @@ interface Series extends ModelBase {
   year: number;
   isSaving?: boolean;
   addOptions: SeriesAddOptions;
+  siteDetailURL: string;
+  platforms : Platform[];
+  deck : string,
+  description : string,
 }
 
 export default Series;

@@ -29,7 +29,7 @@ import styles from './AddNewSeriesModalContent.css';
 export interface AddNewSeriesModalContentProps
   extends Pick<
     AddSeries,
-    'tvdbId' | 'title' | 'year' | 'overview' | 'images' | 'folder'
+    'tvdbId' | 'name' | 'year' | 'overview' | 'images' | 'folder'
   > {
   initialSeriesType: string;
   onModalClose: () => void;
@@ -37,7 +37,7 @@ export interface AddNewSeriesModalContentProps
 
 function AddNewSeriesModalContent({
   tvdbId,
-  title,
+  name,
   year,
   overview,
   images,
@@ -121,9 +121,9 @@ function AddNewSeriesModalContent({
   return (
     <ModalContent onModalClose={onModalClose}>
       <ModalHeader>
-        {title}
+        {name}
 
-        {!title.includes(String(year)) && year ? (
+        {!name.includes(String(year)) && year ? (
           <span className={styles.year}>({year})</span>
         ) : null}
       </ModalHeader>
@@ -291,7 +291,7 @@ function AddNewSeriesModalContent({
           isSpinning={isAdding}
           onPress={handleAddSeriesPress}
         >
-          {translate('AddSeriesWithTitle', { title })}
+          {translate('AddSeriesWithTitle', { name })}
         </SpinnerButton>
       </ModalFooter>
     </ModalContent>

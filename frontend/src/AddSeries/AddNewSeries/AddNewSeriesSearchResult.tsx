@@ -21,18 +21,17 @@ type AddNewSeriesSearchResultProps = AddSeries;
 function AddNewSeriesSearchResult({
   tvdbId,
   titleSlug,
-  title,
+  name,
   year,
-  network,
-  originalLanguage,
-  genres = [],
-  status,
+  siteDetailURL,
   statistics = {} as Statistics,
-  ratings,
   folder,
   overview,
   seriesType,
   images,
+  deck,
+  description,
+  platforms
 }: AddNewSeriesSearchResultProps) {
   const isExistingSeries = useSelector(createExistingSeriesSelector(tvdbId));
   const { isSmallScreen } = useSelector(createDimensionsSelector());
@@ -79,9 +78,9 @@ function AddNewSeriesSearchResult({
           <div className={styles.titleRow}>
             <div className={styles.titleContainer}>
               <div className={styles.title}>
-                {title}
-
-                {!title.includes(String(year)) && year ? (
+                {name}
+                
+                {!name.includes(String(year)) && year ? (
                   <span className={styles.year}>({year})</span>
                 ) : null}
               </div>
@@ -99,7 +98,7 @@ function AddNewSeriesSearchResult({
 
               <Link
                 className={styles.tvdbLink}
-                to={`https://www.thetvdb.com/?tab=series&id=${tvdbId}`}
+                to={siteDetailURL}
                 onPress={handleTvdbLinkPress}
               >
                 <Icon
@@ -112,55 +111,24 @@ function AddNewSeriesSearchResult({
           </div>
 
           <div>
-            <Label size={sizes.LARGE}>
-              <HeartRating
-                rating={ratings.value}
-                votes={ratings.votes}
-                iconSize={13}
-              />
-            </Label>
+            {platforms ? (
+              platforms.map((platform) => (
+                <Link
+                className={styles.tvdbLink}
+                to={platform.siteDetailURL}
+                onPress={handleTvdbLinkPress}
+                >
+                  <Label size={sizes.LARGE}>
+                    <Icon name={icons.CIRCLE_OUTLINE} size={13} />
 
-            {originalLanguage?.name ? (
-              <Label size={sizes.LARGE}>
-                <Icon name={icons.LANGUAGE} size={13} />
-
-                <span className={styles.originalLanguageName}>
-                  {originalLanguage.name}
-                </span>
-              </Label>
-            ) : null}
-
-            {network ? (
-              <Label size={sizes.LARGE}>
-                <Icon name={icons.NETWORK} size={13} />
-
-                <span className={styles.network}>{network}</span>
-              </Label>
-            ) : null}
-
-            {genres.length > 0 ? (
-              <Label size={sizes.LARGE}>
-                <Icon name={icons.GENRE} size={13} />
-                <SeriesGenres className={styles.genres} genres={genres} />
-              </Label>
-            ) : null}
-
-            {seasonCount ? <Label size={sizes.LARGE}>{seasons}</Label> : null}
-
-            {status === 'ended' ? (
-              <Label kind={kinds.DANGER} size={sizes.LARGE}>
-                {translate('Ended')}
-              </Label>
-            ) : null}
-
-            {status === 'upcoming' ? (
-              <Label kind={kinds.INFO} size={sizes.LARGE}>
-                {translate('Upcoming')}
-              </Label>
+                    <span className={styles.network}>{platform.abbreviation}</span>
+                  </Label>
+                </Link>
+              ))
             ) : null}
           </div>
 
-          <div className={styles.overview}>{overview}</div>
+          <div className={styles.overview}>{deck}</div>
 
           <MetadataAttribution />
         </div>
@@ -169,7 +137,7 @@ function AddNewSeriesSearchResult({
       <AddNewSeriesModal
         isOpen={isNewAddSeriesModalOpen && !isExistingSeries}
         tvdbId={tvdbId}
-        title={title}
+        name={name}
         year={year}
         overview={overview}
         folder={folder}

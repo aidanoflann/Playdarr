@@ -2135,7 +2135,7 @@
     "MetadataXmbcSettingsSeriesMetadataEpisodeGuideHelpText": "tvshow.nfo'ya JSON biçimli bölüm rehberi öğesini ekleyin ('Dizi Meta Verisi' gerektirir)",
     "OnEpisodeFileDelete": "Bölüm Dosyası Silindiğinde",
     "RemotePathMappingLocalWrongOSPathHealthCheckMessage": "Yerel indirme istemcisi {downloadClientName} indirmeleri {path} yoluna yerleştiyor ancak bu geçerli bir {osName} yolu değil. İndirme istemcisi ayarlarınızı inceleyin.",
-    "SeriesAndEpisodeInformationIsProvidedByTheTVDB": "Dizi ve bölüm bilgileri TheTVDB.com tarafından sağlanmaktadır. [Lütfen hizmetlerini desteklemeyi düşünün]({url}) .",
+    "SeriesAndEpisodeInformationIsProvidedByProvider": "Dizi ve bölüm bilgileri GiantBomb tarafından sağlanmaktadır. [Lütfen hizmetlerini desteklemeyi düşünün]({url}) .",
     "SeriesFootNote": "İsteğe bağlı olarak, üç nokta (`...`) dahil olmak üzere maksimum bayt sayısına kadar kesmeyi kontrol edin. Sondan (örn. `{Series Title:30}`) veya başlangıçtan (örn. `{Series Title:-30}`) kesme her ikisi de desteklenir.",
     "ShowSeriesTitleHelpText": "Poster altında dizi başlığını göster",
     "SupportedImportListsMoreInfo": "Bireysel içe aktarma listeleri hakkında daha fazla bilgi edinmek için daha fazla bilgi butonlarına tıklayın.",

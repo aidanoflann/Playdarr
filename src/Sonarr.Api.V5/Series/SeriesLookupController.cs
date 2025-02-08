@@ -3,6 +3,7 @@ using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.SeriesStats;
+using Sonarr.Api.V5.Game;
 using Sonarr.Http;
 
 namespace Sonarr.Api.V5.Series;
@@ -22,9 +23,9 @@ public class SeriesLookupController : Controller
     }
 
     [HttpGet]
-    public IEnumerable<SeriesResource> Search([FromQuery] string term)
+    public IEnumerable<GameResource> Search([FromQuery] string term)
     {
-        var tvDbResults = _searchProxy.SearchForNewSeries(term);
+        var tvDbResults = _searchProxy.SearchForNewGame(term);
         return MapToResource(tvDbResults);
     }
 
@@ -44,6 +45,35 @@ public class SeriesLookupController : Controller
             }
 
             resource.Folder = _fileNameBuilder.GetSeriesFolder(currentSeries);
+            resource.Statistics = new SeriesStatistics().ToResource(resource.Seasons);
+
+            yield return resource;
+        }
+    }
+
+    private IEnumerable<GameResource> MapToResource(IEnumerable<NzbDrone.Core.Games.Game> games)
+    {
+        foreach (var currentGame in games)
+        {
+            var resource = currentGame.ToResource();
+            if (resource.Platforms != null)
+            {
+                foreach (var platform in currentGame.Platforms)
+                {
+                    resource.Platforms.Add(platform.ToResource());
+                }
+            }
+
+            _coverMapper.ConvertToLocalUrls(resource.Id, resource.Images);
+
+            var poster = currentGame.Images.FirstOrDefault(c => c.CoverType == MediaCoverTypes.Poster);
+
+            if (poster != null)
+            {
+                resource.RemotePoster = poster.RemoteUrl;
+            }
+
+            // resource.Folder = _fileNameBuilder.GetSeriesFolder(currentGame);
             resource.Statistics = new SeriesStatistics().ToResource(resource.Seasons);
 
             yield return resource;
