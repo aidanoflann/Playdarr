@@ -1,5 +1,5 @@
 const sonarrBlue = '#35c5f4';
-const sonarrAlternateBlue = '#2193b5';
+const sonarrAlternateBlue = '#c76bbe';
 const darkGray = '#888';
 const mediumGray = '#999';
 const gray = '#adadad';
