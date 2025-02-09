@@ -28,11 +28,9 @@ export default function createHandleActions(handlers, defaultState, section) {
     [SET]: function(state, { payload }) {
       const payloadSection = payload.section;
       const [baseSection] = payloadSection.split('.');
-
       if (section === baseSection) {
         const newState = Object.assign(getSectionState(state, payloadSection),
           _.omit(payload, omittedProperties));
-
         return updateSectionState(state, payloadSection, newState);
       }
 

@@ -56,6 +56,8 @@ public class GameResource : RestResource
     public List<PlatformResource>? Platforms { get; set; }
     public string? Deck { get; set; }
     public string? Description { get; set; }
+    public int GbId { get; set; }
+    public string? GbGuid { get; set; }
 }
 
 public class AlternateTitleResource
@@ -106,6 +108,66 @@ public static class GameResourceMapper
             Platforms = new List<PlatformResource>(), // TODO: use JsonClone here? rather than the current post-op
             Deck = model.Deck,
             Description = model.Description,
+            GbId = model.GbId,
+            GbGuid = model.GbGuid,
         };
+    }
+
+    public static NzbDrone.Core.Games.Game ToModel(this GameResource resource)
+    {
+        return new NzbDrone.Core.Games.Game
+        {
+            Id = resource.Id,
+            Name = resource.Name,
+            SortTitle = resource.SortTitle,
+            Status = resource.Status,
+            Overview = resource.Overview,
+            Network = resource.Network,
+            AirTime = resource.AirTime,
+            Images = resource.Images.JsonClone(),
+            Seasons = new List<Season>(),
+            Year = resource.Year,
+            OriginalLanguage = resource.OriginalLanguage,
+            Path = resource.Path,
+            QualityProfileId = resource.QualityProfileId,
+            SeasonFolder = resource.SeasonFolder,
+            Monitored = resource.Monitored,
+            MonitorNewItems = resource.MonitorNewItems,
+            UseSceneNumbering = resource.UseSceneNumbering,
+            Runtime = resource.Runtime,
+            TvdbId = resource.TvdbId,
+            TvRageId = resource.TvRageId,
+            TvMazeId = resource.TvMazeId,
+            TmdbId = resource.TmdbId,
+            OriginalReleaseDate = resource.OriginalReleaseDate,
+            LastAired = resource.LastAired,
+            SeriesType = resource.SeriesType,
+            CleanTitle = resource.CleanTitle,
+            ImdbId = resource.ImdbId,
+            TitleSlug = resource.TitleSlug,
+            Certification = resource.Certification,
+            Genres = resource.Genres,
+            Tags = resource.Tags,
+            Added = resource.Added,
+            AddOptions = resource.AddOptions,
+            Ratings = resource.Ratings,
+            SiteDetailURL = resource.SiteDetailURL,
+            Platforms = new List<NzbDrone.Core.Games.Platform>(),
+            Deck = resource.Deck,
+            Description = resource.Description,
+            GbId = resource.GbId,
+            GbGuid = resource.GbGuid,
+        };
+    }
+
+    public static List<NzbDrone.Core.Games.Game> ToModel(this IEnumerable<GameResource> resources)
+    {
+        return resources.Select(ToModel).ToList();
+    }
+
+    public static List<GameResource> ToResource(this IEnumerable<NzbDrone.Core.Games.Game> games,
+        bool includeSeasonImages = false)
+    {
+        return games.Select(s => ToResource(s, includeSeasonImages)).ToList();
     }
 }

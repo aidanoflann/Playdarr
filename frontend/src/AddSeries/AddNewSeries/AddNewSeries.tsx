@@ -75,7 +75,7 @@ function AddNewSeries() {
             className={styles.searchInput}
             name="seriesLookup"
             value={term}
-            placeholder="eg. Breaking Bad, tvdb:####"
+            placeholder="eg. Pong, tvdb:####"
             autoFocus={true}
             onChange={handleSearchInputChange}
           />
@@ -104,7 +104,8 @@ function AddNewSeries() {
           <div className={styles.searchResults}>
             {data.map((item) => {
               // item here is GameResource
-              return <AddNewSeriesSearchResult key={item.tvdbId} {...item} />;
+              console.log(item)
+              return <AddNewSeriesSearchResult key={item.gbGuid} {...item} />;
             })}
           </div>
         ) : null}

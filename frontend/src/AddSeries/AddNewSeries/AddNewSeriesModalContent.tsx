@@ -29,13 +29,15 @@ import styles from './AddNewSeriesModalContent.css';
 export interface AddNewSeriesModalContentProps
   extends Pick<
     AddSeries,
-    'tvdbId' | 'name' | 'year' | 'overview' | 'images' | 'folder'
+    'tvdbId' | 'name' | 'year' | 'overview' | 'images' | 'folder' | 'gbId' | 'gbGuid'
   > {
   initialSeriesType: string;
   onModalClose: () => void;
 }
 
 function AddNewSeriesModalContent({
+  gbId,
+  gbGuid,
   tvdbId,
   name,
   year,
@@ -90,7 +92,7 @@ function AddNewSeriesModalContent({
   const handleAddSeriesPress = useCallback(() => {
     dispatch(
       addSeries({
-        tvdbId,
+        gbId,
         rootFolderPath: rootFolderPath.value,
         monitor: monitor.value,
         qualityProfileId: qualityProfileId.value,
@@ -102,7 +104,7 @@ function AddNewSeriesModalContent({
       })
     );
   }, [
-    tvdbId,
+    gbId,
     seriesType,
     rootFolderPath,
     monitor,

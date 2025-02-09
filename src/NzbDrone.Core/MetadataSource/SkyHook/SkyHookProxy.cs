@@ -334,8 +334,14 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
             // game.MalIds = showResource.MalIds;
             // game.AniListIds = showResource.AniListIds;
             game.Name = gameResource.Name;
+            game.GbId = gameResource.Id;
+            game.GbGuid = gameResource.guid;
             game.SiteDetailURL = gameResource.Site_Detail_url;
-            game.Platforms = gameResource.Platforms.Select(MapPlatforms).ToList();
+            if (gameResource.Platforms != null)
+            {
+                game.Platforms = gameResource.Platforms.Select(MapPlatforms).ToList();
+            }
+
             game.Deck = gameResource.Deck;
             game.Description = gameResource.Description;
 

@@ -31,7 +31,9 @@ function AddNewSeriesSearchResult({
   images,
   deck,
   description,
-  platforms
+  platforms,
+  gbId,
+  gbGuid
 }: AddNewSeriesSearchResultProps) {
   const isExistingSeries = useSelector(createExistingSeriesSelector(tvdbId));
   const { isSmallScreen } = useSelector(createDimensionsSelector());
@@ -112,11 +114,12 @@ function AddNewSeriesSearchResult({
 
           <div>
             {platforms ? (
-              platforms.map((platform) => (
+              platforms.map((platform, index) => (
                 <Link
                 className={styles.tvdbLink}
                 to={platform.siteDetailURL}
                 onPress={handleTvdbLinkPress}
+                key={index}
                 >
                   <Label size={sizes.LARGE}>
                     <Icon name={icons.CIRCLE_OUTLINE} size={13} />
@@ -136,6 +139,8 @@ function AddNewSeriesSearchResult({
 
       <AddNewSeriesModal
         isOpen={isNewAddSeriesModalOpen && !isExistingSeries}
+        gbId={gbId}
+        gbGuid={gbGuid}
         tvdbId={tvdbId}
         name={name}
         year={year}

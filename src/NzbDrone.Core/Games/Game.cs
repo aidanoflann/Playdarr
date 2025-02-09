@@ -65,6 +65,8 @@ namespace NzbDrone.Core.Games
         public List<Platform> Platforms { get; set; }
         public string Deck { get; set; }
         public string Description { get; set; }
+        public int GbId { get; set; }
+        public string GbGuid { get; set; }
 
         public override string ToString()
         {

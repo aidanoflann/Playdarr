@@ -73,7 +73,7 @@ public class SeriesLookupController : Controller
                 resource.RemotePoster = poster.RemoteUrl;
             }
 
-            // resource.Folder = _fileNameBuilder.GetSeriesFolder(currentGame);
+            resource.Folder = _fileNameBuilder.GetGameFolder(currentGame);
             resource.Statistics = new SeriesStatistics().ToResource(resource.Seasons);
 
             yield return resource;

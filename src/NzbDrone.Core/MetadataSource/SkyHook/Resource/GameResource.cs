@@ -17,6 +17,8 @@ namespace NzbDrone.Core.MetadataSource.SkyHook.Resource
         public string Deck { get; set; }
         public string Description { get; set; }
         public GameImageResource Image { get; set; }
+        public int Id { get; set; }
+        public string guid { get; set; }
     }
 
     public class PlatformResource

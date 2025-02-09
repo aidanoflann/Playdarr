@@ -116,6 +116,8 @@ interface Series extends ModelBase {
   platforms : Platform[];
   deck : string,
   description : string,
+  gbId: number,
+  gbGuid: string,
 }
 
 export default Series;
