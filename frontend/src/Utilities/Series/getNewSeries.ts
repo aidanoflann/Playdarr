@@ -34,8 +34,6 @@ function getNewSeries(series: Series, payload: NewSeriesPayload) {
     searchForMissingEpisodes,
     searchForCutoffUnmetEpisodes,
   };
-  console.log("OOO")
-  console.log(payload)
   series.addOptions = addOptions;
   series.monitored = true;
   series.monitorNewItems = monitorNewItems;

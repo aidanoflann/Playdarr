@@ -118,11 +118,15 @@ export const actionHandlers = handleThunks({
     dispatch(set({ section, isAdding: true }));
     const gbId = payload.gbId;
     const items = getState().addSeries.items;
-    console.log(getState())
     const newSeries = getNewSeries(_.cloneDeep(_.find(items, { gbId: gbId })), payload);
 
+    newSeries.title = newSeries.name
+    newSeries.tvdbId = newSeries.gbId
+
+    console.log(newSeries)
+
     const promise = createAjaxRequest({
-      url: '/games',
+      url: '/games/import',
       method: 'POST',
       dataType: 'json',
       contentType: 'application/json',

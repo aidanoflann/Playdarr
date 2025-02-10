@@ -63,6 +63,12 @@ function AddNewSeries() {
     setTerm(initialTerm);
   }, [initialTerm]);
 
+  // HACK: add items to state.addSeries because the V3 AddSeriesAction expects them there
+  const currentState = useSelector(
+    (state : AppState) => state
+  )
+  currentState.addSeries.items = data;
+
   return (
     <PageContent title={translate('AddNewSeries')}>
       <PageContentBody>
@@ -104,7 +110,6 @@ function AddNewSeries() {
           <div className={styles.searchResults}>
             {data.map((item) => {
               // item here is GameResource
-              console.log(item)
               return <AddNewSeriesSearchResult key={item.gbGuid} {...item} />;
             })}
           </div>

@@ -1,10 +1,11 @@
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.Games;
 using Sonarr.Http;
 
-namespace Sonarr.Api.V5.Game
+namespace Sonarr.Api.V3.Game
 {
-    [V5ApiController("games/import")]
+    [V3ApiController("games/import")]
     public class GameImportController : Controller
     {
         private readonly IAddGameService _addGameService;
@@ -17,7 +18,6 @@ namespace Sonarr.Api.V5.Game
         [HttpPost]
         public object Import([FromBody] List<GameResource> resource)
         {
-            // TODO: move this to V5
             // TODO: handle a GameResource instead
             var newGames = resource.ToModel();
             return _addGameService.AddGames(newGames).ToResource();

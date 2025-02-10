@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Games
             // newGame = AddSkyhookData(newGame);
             // newGame = SetPropertiesAndValidate(newGame);
 
-            _logger.Info("Adding Series {0} Path: [{1}]", newGame, newGame.Path);
+            _logger.Info("Adding Game {0} Path: [{1}]", newGame, newGame.Path);
             _gameService.AddGame(newGame);
 
             return newGame;

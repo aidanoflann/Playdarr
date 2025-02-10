@@ -29,34 +29,12 @@ public class SeriesLookupController : Controller
         return MapToResource(tvDbResults);
     }
 
-    private IEnumerable<SeriesResource> MapToResource(IEnumerable<NzbDrone.Core.Tv.Series> series)
-    {
-        foreach (var currentSeries in series)
-        {
-            var resource = currentSeries.ToResource();
-
-            _coverMapper.ConvertToLocalUrls(resource.Id, resource.Images);
-
-            var poster = currentSeries.Images.FirstOrDefault(c => c.CoverType == MediaCoverTypes.Poster);
-
-            if (poster != null)
-            {
-                resource.RemotePoster = poster.RemoteUrl;
-            }
-
-            resource.Folder = _fileNameBuilder.GetSeriesFolder(currentSeries);
-            resource.Statistics = new SeriesStatistics().ToResource(resource.Seasons);
-
-            yield return resource;
-        }
-    }
-
     private IEnumerable<GameResource> MapToResource(IEnumerable<NzbDrone.Core.Games.Game> games)
     {
         foreach (var currentGame in games)
         {
             var resource = currentGame.ToResource();
-            if (resource.Platforms != null)
+            if (currentGame.Platforms != null && resource.Platforms != null)
             {
                 foreach (var platform in currentGame.Platforms)
                 {
