@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Games;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.Tv;
@@ -59,7 +60,7 @@ public class GameResource : RestResource
     // public SeriesStatisticsResource? Statistics { get; set; }
     public bool? EpisodesChanged { get; set; }
     public string? SiteDetailURL { get; set; }
-    public List<PlatformResource>? Platforms { get; set; }
+    public List<Platform>? Platforms { get; set; }
     public string? Deck { get; set; }
     public string? Description { get; set; }
     public int GbId { get; set; }
@@ -110,7 +111,7 @@ public static class GameResourceMapper
             AddOptions = model.AddOptions,
             Ratings = model.Ratings,
             SiteDetailURL = model.SiteDetailURL,
-            Platforms = new List<PlatformResource>(), // TODO: use JsonClone here? rather than the current post-op
+            Platforms = model.Platforms.JsonClone(),
             Deck = model.Deck,
             Description = model.Description,
             GbId = model.GbId,
@@ -157,7 +158,7 @@ public static class GameResourceMapper
             AddOptions = resource.AddOptions,
             Ratings = resource.Ratings,
             SiteDetailURL = resource.SiteDetailURL,
-            Platforms = new List<NzbDrone.Core.Games.Platform>(),
+            Platforms = resource.Platforms.JsonClone(),
             Deck = resource.Deck,
             Description = resource.Description,
             GbId = resource.GbId,

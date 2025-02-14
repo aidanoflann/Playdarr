@@ -122,6 +122,8 @@ export const actionHandlers = handleThunks({
 
     newSeries.title = newSeries.name
     newSeries.tvdbId = newSeries.gbId
+    newSeries.description = "" // nulling this because it might fux wit sql"
+    newSeries.path = newSeries.rootFolderPath // HACK: series used rootFolderPath but not clear where it got converted to Path on c# side
 
     console.log(newSeries)
 
@@ -130,7 +132,7 @@ export const actionHandlers = handleThunks({
       method: 'POST',
       dataType: 'json',
       contentType: 'application/json',
-      data: JSON.stringify(newSeries)
+      data: JSON.stringify([newSeries])
     }).request;
 
     promise.done((data) => {

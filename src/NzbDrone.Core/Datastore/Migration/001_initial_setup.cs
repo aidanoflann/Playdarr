@@ -1,5 +1,6 @@
 ﻿using FluentMigrator;
 using NzbDrone.Core.Datastore.Migration.Framework;
+using NzbDrone.Core.Languages;
 
 namespace NzbDrone.Core.Datastore.Migration
 {
@@ -40,6 +41,57 @@ namespace NzbDrone.Core.Datastore.Migration
                 .WithColumn("UseSceneNumbering").AsBoolean()
                 .WithColumn("FirstAired").AsDateTime().Nullable()
                 .WithColumn("NextAiring").AsDateTime().Nullable();
+            Create.TableForModel("Games")
+                .WithColumn("TvdbId").AsInt32().Nullable()
+                .WithColumn("TvRageId").AsInt32().Nullable()
+                .WithColumn("TvMazeId").AsInt32().Nullable()
+                .WithColumn("ImdbId").AsString().Nullable()
+                .WithColumn("Name").AsString()
+                .WithColumn("TitleSlug").AsString().Nullable()
+                .WithColumn("CleanTitle").AsString().Nullable()
+                .WithColumn("Status").AsInt32().Nullable()
+                .WithColumn("Overview").AsString().Nullable()
+                .WithColumn("AirTime").AsString().Nullable()
+                .WithColumn("Images").AsString()
+                .WithColumn("Path").AsString()
+                .WithColumn("Monitored").AsBoolean()
+                .WithColumn("QualityProfileId").AsInt32().Nullable()
+                .WithColumn("SeasonFolder").AsBoolean().Nullable()
+                .WithColumn("LastInfoSync").AsDateTime().Nullable()
+                .WithColumn("LastDiskSync").AsDateTime().Nullable()
+                .WithColumn("Runtime").AsInt32().Nullable()
+                .WithColumn("SeriesType").AsInt32().Nullable()
+                .WithColumn("Network").AsString().Nullable().Nullable()
+                .WithColumn("UseSceneNumbering").AsBoolean().Nullable()
+                .WithColumn("FirstAired").AsDateTime().Nullable()
+                .WithColumn("NextAiring").AsDateTime().Nullable()
+                .WithColumn("SiteDetailURL").AsString().Nullable()
+                .WithColumn("Platforms").AsString()
+                .WithColumn("Deck").AsString().Nullable()
+                .WithColumn("Description").AsString().Nullable()
+                .WithColumn("GbId").AsInt32().Unique()
+                .WithColumn("GbGuid").AsString().Unique()
+                .WithColumn("OriginalReleaseDate").AsDateTime().Unique();
+
+            // immediately do all the migrations done for Series
+            Create.Column("SortTitle").OnTable("Games").AsString().Nullable();
+            Alter.Table("Games").AddColumn("Year").AsInt32().Nullable();
+            Alter.Table("Games").AddColumn("Seasons").AsString().Nullable();
+            Alter.Table("Games").AddColumn("Actors").AsString().Nullable();
+            Alter.Table("Games").AddColumn("Ratings").AsString().Nullable();
+            Alter.Table("Games").AddColumn("Genres").AsString().Nullable();
+            Alter.Table("Games").AddColumn("Certification").AsString().Nullable();
+            Alter.Table("Games").AddColumn("ProfileId").AsInt32().Nullable();
+            Alter.Table("Games").AddColumn("Tags").AsString().Nullable();
+            Alter.Table("Games").AddColumn("Added").AsDateTime().Nullable();
+            Alter.Table("Games").AddColumn("AddOptions").AsString().Nullable();
+            Alter.Table("Games").AddColumn("OriginalLanguage").AsInt32().WithDefaultValue((int)Language.English);
+            Alter.Table("Games").AddColumn("LastAired").AsDateTimeOffset().Nullable();
+            Alter.Table("Games").AddColumn("MonitorNewItems").AsInt32().WithDefaultValue(0);
+            Alter.Table("Games").AddColumn("TmdbId").AsInt32().WithDefaultValue(0);
+
+            Alter.Table("Games").AddColumn("MalIds").AsString().WithDefaultValue("[]");
+            Alter.Table("Games").AddColumn("AniListIds").AsString().WithDefaultValue("[]");
 
             Create.TableForModel("Seasons")
                 .WithColumn("SeriesId").AsInt32()

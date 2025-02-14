@@ -70,7 +70,7 @@ namespace NzbDrone.Core.Games
 
         public override string ToString()
         {
-            return string.Format("[{0}][{1}]", TvdbId, Name.NullSafe());
+            return string.Format("[{0}][{1}]", GbGuid, Name.NullSafe());
         }
 
         public void ApplyChanges(Series otherSeries)

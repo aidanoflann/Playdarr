@@ -2,7 +2,7 @@ using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.Games
 {
-    public class Platform : ModelBase
+    public class Platform : IEmbeddedDocument
     {
         public Platform()
         {
